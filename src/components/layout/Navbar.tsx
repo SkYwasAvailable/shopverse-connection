@@ -2,14 +2,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, User, Menu, X, Search } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Search, LogIn, LogOut, UserCog } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { itemCount } = useCart();
+  const { user, profile, isAdmin, signOut } = useAuth();
   const location = useLocation();
 
   // Handle scroll
@@ -67,6 +77,19 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className={cn(
+                  'text-sm font-medium transition-colors duration-300 hover:text-black/70',
+                  location.pathname === '/admin' 
+                    ? 'text-black' 
+                    : 'text-gray-600'
+                )}
+              >
+                Admin
+              </Link>
+            )}
           </nav>
           
           {/* Desktop Right Section */}
@@ -76,11 +99,49 @@ const Navbar = () => {
                 <Search className="h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/profile">
-                <User className="h-5 w-5" />
-              </Link>
-            </Button>
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={profile?.avatar_url || ''} alt={profile?.name || ''} />
+                      <AvatarFallback>
+                        {profile?.name?.substring(0, 2).toUpperCase() || user.email?.substring(0, 2).toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <UserCog className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/auth">
+                  <LogIn className="h-5 w-5" />
+                </Link>
+              </Button>
+            )}
+            
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link to="/cart">
                 <ShoppingCart className="h-5 w-5" />
@@ -138,6 +199,19 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className={cn(
+                  'block px-3 py-2 rounded-md text-base font-medium transition-colors',
+                  location.pathname === '/admin' 
+                    ? 'text-black bg-gray-100' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                )}
+              >
+                Admin Dashboard
+              </Link>
+            )}
             <Link
               to="/search"
               className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"
@@ -145,13 +219,32 @@ const Navbar = () => {
               <Search className="h-5 w-5 mr-2" />
               Search
             </Link>
-            <Link
-              to="/profile"
-              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"
-            >
-              <User className="h-5 w-5 mr-2" />
-              Profile
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"
+                >
+                  <User className="h-5 w-5 mr-2" />
+                  Profile
+                </Link>
+                <button
+                  onClick={signOut}
+                  className="flex items-center w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"
+                >
+                  <LogOut className="h-5 w-5 mr-2" />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"
+              >
+                <LogIn className="h-5 w-5 mr-2" />
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}

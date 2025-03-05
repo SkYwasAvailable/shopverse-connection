@@ -1,13 +1,17 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getFeaturedProducts } from '@/data/products';
+import { useQuery } from '@tanstack/react-query';
+import { getFeaturedProducts } from '@/api/products';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/products/ProductCard';
 
 const FeaturedProducts = () => {
-  const featuredProducts = getFeaturedProducts();
+  const { data: featuredProducts = [], isLoading } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: getFeaturedProducts,
+  });
   
   return (
     <section className="py-16 bg-gray-50">
@@ -28,9 +32,20 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {isLoading ? (
+            // Loading placeholders
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="h-96 bg-white animate-pulse rounded-lg shadow-sm"></div>
+            ))
+          ) : featuredProducts.length > 0 ? (
+            featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8">
+              <p className="text-gray-500">No featured products found.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
