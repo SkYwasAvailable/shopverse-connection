@@ -45,8 +45,8 @@ const ProductDetail = () => {
     );
   }
   
-  // Get related products
-  const relatedProducts = getProductsByCategory(product.category)
+  // Get related products using category_id instead of category
+  const relatedProducts = getProductsByCategory(product.category_id || '')
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
   

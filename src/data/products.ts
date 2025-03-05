@@ -39,7 +39,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1691272048033-2a4751c63427?q=80&w=1972&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1592950630581-03cb41342cc5?q=80&w=1942&auto=format&fit=crop"
     ],
-    category: "smartphones",
+    category_id: "smartphones",
+    category: categories.find(cat => cat.id === "smartphones"),
     featured: true,
     inStock: true
   },
@@ -52,7 +53,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=2070&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop"
     ],
-    category: "laptops",
+    category_id: "laptops",
+    category: categories.find(cat => cat.id === "laptops"),
     featured: true,
     inStock: true
   },
@@ -65,7 +67,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=1915&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1527698266440-12104e498b76?q=80&w=2070&auto=format&fit=crop"
     ],
-    category: "tablets",
+    category_id: "tablets",
+    category: categories.find(cat => cat.id === "tablets"),
     featured: true,
     inStock: true
   },
@@ -78,7 +81,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=1972&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1964&auto=format&fit=crop"
     ],
-    category: "wearables",
+    category_id: "wearables",
+    category: categories.find(cat => cat.id === "wearables"),
     featured: true,
     inStock: true
   },
@@ -91,7 +95,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1605236453806-6ff36851218e?q=80&w=1974&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=1972&auto=format&fit=crop"
     ],
-    category: "smartphones",
+    category_id: "smartphones",
+    category: categories.find(cat => cat.id === "smartphones"),
     inStock: true
   },
   {
@@ -103,7 +108,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2020&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=2068&auto=format&fit=crop"
     ],
-    category: "laptops",
+    category_id: "laptops",
+    category: categories.find(cat => cat.id === "laptops"),
     inStock: true
   },
   {
@@ -115,7 +121,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1623126908029-58cb08a2b272?q=80&w=1974&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1592434134753-a70baf7979d5?q=80&w=1974&auto=format&fit=crop"
     ],
-    category: "tablets",
+    category_id: "tablets",
+    category: categories.find(cat => cat.id === "tablets"),
     inStock: true
   },
   {
@@ -127,7 +134,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=2070&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1673742418427-01044d1ee423?q=80&w=1941&auto=format&fit=crop"
     ],
-    category: "wearables",
+    category_id: "wearables",
+    category: categories.find(cat => cat.id === "wearables"),
     inStock: true
   },
   {
@@ -139,7 +147,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1602992708529-c9fdb12905c9?q=80&w=2070&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1508811160681-cbf841afdfea?q=80&w=2073&auto=format&fit=crop"
     ],
-    category: "smartphones",
+    category_id: "smartphones",
+    category: categories.find(cat => cat.id === "smartphones"),
     inStock: true
   },
   {
@@ -151,7 +160,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=2068&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=2070&auto=format&fit=crop"
     ],
-    category: "laptops",
+    category_id: "laptops",
+    category: categories.find(cat => cat.id === "laptops"),
     inStock: true
   },
   {
@@ -163,7 +173,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?q=80&w=1970&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1597355283276-a77dbbbbd8d7?q=80&w=1964&auto=format&fit=crop"
     ],
-    category: "wearables",
+    category_id: "wearables",
+    category: categories.find(cat => cat.id === "wearables"),
     inStock: true
   },
   {
@@ -175,7 +186,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1589003511963-9b781ef11f81?q=80&w=1964&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1557825835-8d022694ef5c?q=80&w=1974&auto=format&fit=crop"
     ],
-    category: "wearables",
+    category_id: "wearables",
+    category: categories.find(cat => cat.id === "wearables"),
     inStock: true
   }
 ];
@@ -189,7 +201,7 @@ export const getProductById = (id: string): Product | undefined => {
 };
 
 export const getProductsByCategory = (categoryId: string): Product[] => {
-  return products.filter(product => product.category === categoryId);
+  return products.filter(product => product.category_id === categoryId);
 };
 
 export const getAllProducts = (): Product[] => {

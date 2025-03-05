@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/layout/Navbar';
@@ -40,7 +39,7 @@ const Products = () => {
     
     // Filter by category
     if (selectedCategory) {
-      filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+      filteredProducts = filteredProducts.filter(product => product.category_id === selectedCategory);
     }
     
     // Filter by price range

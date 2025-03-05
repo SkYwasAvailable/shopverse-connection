@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Navigate } from 'react-router-dom';
@@ -16,7 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Pencil, Trash2, Plus, ShoppingBag, Category, Package } from 'lucide-react';
+import { Pencil, Trash2, Plus, ShoppingBag, FolderOpen, Package } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { getAllProducts, createProduct, updateProduct, deleteProduct } from '@/api/products';
 import { getAllCategories, createCategory, updateCategory, deleteCategory } from '@/api/categories';
@@ -27,7 +26,6 @@ const Admin = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   
-  // If not an admin, redirect to home
   if (!loading && !isAdmin) {
     return <Navigate to="/" />;
   }
@@ -56,7 +54,7 @@ const Admin = () => {
                   Products
                 </TabsTrigger>
                 <TabsTrigger value="categories" className="flex items-center">
-                  <Category className="mr-2 h-4 w-4" />
+                  <FolderOpen className="mr-2 h-4 w-4" />
                   Categories
                 </TabsTrigger>
                 <TabsTrigger value="orders" className="flex items-center">
@@ -97,14 +95,12 @@ const Admin = () => {
   );
 };
 
-// Products Manager Component
 const ProductsManager = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
-  // Fetch products and categories data
   const { data: products = [], isLoading: isLoadingProducts } = useQuery({
     queryKey: ['products'],
     queryFn: getAllProducts,
@@ -115,7 +111,6 @@ const ProductsManager = () => {
     queryFn: getAllCategories,
   });
   
-  // Mutations
   const createProductMutation = useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
@@ -287,20 +282,17 @@ const ProductsManager = () => {
   );
 };
 
-// Categories Manager Component
 const CategoriesManager = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
   
-  // Fetch categories data
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: getAllCategories,
   });
   
-  // Mutations
   const createCategoryMutation = useMutation({
     mutationFn: createCategory,
     onSuccess: () => {
@@ -461,7 +453,6 @@ const CategoriesManager = () => {
   );
 };
 
-// Product Form Component
 interface ProductFormProps {
   product: Product | null;
   categories: CategoryType[];
@@ -481,7 +472,6 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
     if (!name || !description || !price || !images) {
       alert('Please fill in all required fields');
       return;
@@ -599,7 +589,6 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
   );
 };
 
-// Category Form Component
 interface CategoryFormProps {
   category: CategoryType | null;
   onSubmit: (category: Partial<CategoryType>) => void;
@@ -614,7 +603,6 @@ const CategoryForm = ({ category, onSubmit, isSubmitting }: CategoryFormProps) =
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
     if (!name) {
       alert('Please enter a category name');
       return;
