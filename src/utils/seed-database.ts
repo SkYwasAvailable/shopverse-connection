@@ -10,10 +10,9 @@ export const seedDatabase = async () => {
       throw error;
     }
     
-    console.log('Database seeded successfully:', data);
     return data;
   } catch (error) {
-    console.error('Error in seedDatabase function:', error);
+    console.error('Failed to seed database:', error);
     throw error;
   }
 };
