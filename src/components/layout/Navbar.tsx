@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -40,7 +39,9 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
-    { name: 'Categories', path: '/categories' }
+    { name: 'Categories', path: '/categories' },
+    { name: 'Featured', path: '/featured' },
+    { name: 'New Arrivals', path: '/new-arrivals' }
   ];
 
   return (
@@ -77,19 +78,17 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className={cn(
-                  'text-sm font-medium transition-colors duration-300 hover:text-black/70',
-                  location.pathname === '/admin' 
-                    ? 'text-black' 
-                    : 'text-gray-600'
-                )}
-              >
-                Admin
-              </Link>
-            )}
+            <Link
+              to="/admin"
+              className={cn(
+                'text-sm font-medium transition-colors duration-300 hover:text-black/70',
+                location.pathname === '/admin' 
+                  ? 'text-black' 
+                  : 'text-gray-600'
+              )}
+            >
+              Admin
+            </Link>
           </nav>
           
           {/* Desktop Right Section */}
@@ -199,19 +198,17 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className={cn(
-                  'block px-3 py-2 rounded-md text-base font-medium transition-colors',
-                  location.pathname === '/admin' 
-                    ? 'text-black bg-gray-100' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                )}
-              >
-                Admin Dashboard
-              </Link>
-            )}
+            <Link
+              to="/admin"
+              className={cn(
+                'block px-3 py-2 rounded-md text-base font-medium transition-colors',
+                location.pathname === '/admin' 
+                  ? 'text-black bg-gray-100' 
+                  : 'text-gray-600 hover:bg-gray-50'
+              )}
+            >
+              Admin Dashboard
+            </Link>
             <Link
               to="/search"
               className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50"

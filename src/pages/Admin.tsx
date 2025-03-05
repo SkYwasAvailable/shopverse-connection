@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Navigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -22,13 +20,8 @@ import { getAllCategories, createCategory, updateCategory, deleteCategory } from
 import { Product, Category as CategoryType } from '@/types';
 
 const Admin = () => {
-  const { isAdmin, loading } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  
-  if (!loading && !isAdmin) {
-    return <Navigate to="/" />;
-  }
   
   return (
     <>

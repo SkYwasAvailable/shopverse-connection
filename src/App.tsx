@@ -11,6 +11,9 @@ import Index from "@/pages/Index";
 import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import Categories from "@/pages/Categories";
+import Featured from "@/pages/Featured";
+import NewArrivals from "@/pages/NewArrivals";
+import Search from "@/pages/Search";
 import Cart from "@/pages/Cart";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
@@ -33,6 +36,9 @@ function App() {
                 <Route path="/products/:productId" element={<ProductDetail />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/categories/:categoryId" element={<Categories />} />
+                <Route path="/featured" element={<Featured />} />
+                <Route path="/new-arrivals" element={<NewArrivals />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
