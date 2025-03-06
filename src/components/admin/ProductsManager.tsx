@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -76,10 +75,15 @@ const ProductsManager = () => {
   });
   
   const handleCreateOrUpdateProduct = (product: Partial<Product>) => {
+    const productData = { ...product };
+    if (productData.category_id === 'none') {
+      productData.category_id = undefined;
+    }
+    
     if (selectedProduct) {
-      updateProductMutation.mutate({ id: selectedProduct.id, data: product });
+      updateProductMutation.mutate({ id: selectedProduct.id, data: productData });
     } else {
-      createProductMutation.mutate(product as Omit<Product, 'id'>);
+      createProductMutation.mutate(productData as Omit<Product, 'id'>);
     }
   };
   

@@ -90,7 +90,8 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              {/* Fix: Changed from empty string to "none" to avoid error */}
+              <SelectItem value="none">None</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id}>
                   {category.name}
