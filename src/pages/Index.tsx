@@ -20,9 +20,13 @@ const Index = () => {
         <Navbar />
         <main className="flex-grow pt-16">
           <Hero />
-          <FeaturedProducts />
+          <div className="py-8"></div> {/* Added spacing */}
           <Categories />
+          <div className="py-6"></div> {/* Added spacing */}
+          <FeaturedProducts />
+          <div className="py-8"></div> {/* Added spacing */}
           <NewArrivalsFeatured />
+          <div className="py-6"></div> {/* Added spacing */}
           <Promotions />
         </main>
         <Footer />
