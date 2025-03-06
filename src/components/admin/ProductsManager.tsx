@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -20,13 +19,11 @@ const ProductsManager = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   
-  // Check authentication status
   useEffect(() => {
     const checkAuth = async () => {
       const { data } = await supabase.auth.getSession();
       setIsAuthenticated(!!data.session);
       
-      // Set up auth state listener
       const { data: authListener } = supabase.auth.onAuthStateChange(
         (event, session) => {
           setIsAuthenticated(!!session);
@@ -41,7 +38,6 @@ const ProductsManager = () => {
     checkAuth();
   }, []);
   
-  // Fetch products and categories
   const { 
     data: products = [], 
     isLoading: isLoadingProducts, 
@@ -59,7 +55,6 @@ const ProductsManager = () => {
     queryFn: getAllCategories,
   });
   
-  // Create product mutation
   const createProductMutation = useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
@@ -77,7 +72,6 @@ const ProductsManager = () => {
     }
   });
   
-  // Update product mutation
   const updateProductMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Product> }) => 
       updateProduct(id, data),
@@ -96,7 +90,6 @@ const ProductsManager = () => {
     }
   });
   
-  // Delete product mutation
   const deleteProductMutation = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
@@ -113,7 +106,6 @@ const ProductsManager = () => {
     }
   });
   
-  // Event handlers
   const handleCreateOrUpdateProduct = (product: Partial<Product>) => {
     if (!isAuthenticated) {
       toast({ 
@@ -179,7 +171,6 @@ const ProductsManager = () => {
     setProductDialogOpen(true);
   };
   
-  // If still checking authentication
   if (isAuthenticated === null) {
     return (
       <div className="flex justify-center py-12">
@@ -191,7 +182,7 @@ const ProductsManager = () => {
   return (
     <>
       {!isAuthenticated && (
-        <Alert className="mb-6" variant="warning">
+        <Alert className="mb-6" variant="default">
           <Info className="h-4 w-4" />
           <AlertTitle>Authentication Required</AlertTitle>
           <AlertDescription>
