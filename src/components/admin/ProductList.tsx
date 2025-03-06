@@ -3,6 +3,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Product } from '@/types';
 import ProductListItem from './ProductListItem';
+import { AlertCircle } from 'lucide-react';
 
 interface ProductListProps {
   products: Product[];
@@ -45,7 +46,13 @@ const ProductList = ({ products, isLoading, onEditProduct, onDeleteProduct }: Pr
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="text-center h-24">
-                No products found. Add your first product to get started.
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <AlertCircle className="h-8 w-8 text-amber-500" />
+                  <p>No products found. Add your first product to get started.</p>
+                  <p className="text-sm text-gray-500">
+                    Note: You must be authenticated to create products.
+                  </p>
+                </div>
               </TableCell>
             </TableRow>
           )}

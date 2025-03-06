@@ -32,6 +32,7 @@ const ProductListItem = ({ product, onEdit, onDelete }: ProductListItemProps) =>
             variant="outline" 
             size="sm" 
             onClick={() => onEdit(product)}
+            aria-label={`Edit ${product.name}`}
           >
             <Pencil className="h-4 w-4" />
           </Button>
@@ -39,6 +40,7 @@ const ProductListItem = ({ product, onEdit, onDelete }: ProductListItemProps) =>
             variant="outline" 
             size="sm" 
             onClick={() => onDelete(product.id)}
+            aria-label={`Delete ${product.name}`}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
