@@ -1,14 +1,15 @@
+
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Pencil, Trash2, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { getAllProducts, createProduct, updateProduct, deleteProduct } from '@/api/products';
 import { getAllCategories } from '@/api/categories';
 import { Product } from '@/types';
 import ProductForm from '@/components/admin/ProductForm';
+import ProductList from '@/components/admin/ProductList';
 
 const ProductsManager = () => {
   const queryClient = useQueryClient();
@@ -26,6 +27,7 @@ const ProductsManager = () => {
     queryFn: getAllCategories,
   });
   
+  // Mutations for product operations
   const createProductMutation = useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
@@ -74,6 +76,7 @@ const ProductsManager = () => {
     }
   });
   
+  // Event handlers
   const handleCreateOrUpdateProduct = (product: Partial<Product>) => {
     const productData = { ...product };
     if (productData.category_id === 'none') {
@@ -113,69 +116,12 @@ const ProductsManager = () => {
         </Button>
       </div>
 
-      {isLoadingProducts ? (
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
-      ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.length > 0 ? (
-                products.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell className="font-medium">{product.name}</TableCell>
-                    <TableCell>${product.price.toFixed(2)}</TableCell>
-                    <TableCell>{product.category?.name || 'Uncategorized'}</TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        product.inStock 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {product.inStock ? 'In Stock' : 'Out of Stock'}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => openEditDialog(product)}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => handleDeleteProduct(product.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center h-24">
-                    No products found. Add your first product to get started.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <ProductList 
+        products={products}
+        isLoading={isLoadingProducts}
+        onEditProduct={openEditDialog}
+        onDeleteProduct={handleDeleteProduct}
+      />
 
       <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
         <DialogContent className="sm:max-w-[550px]">
