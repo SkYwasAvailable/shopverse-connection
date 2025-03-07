@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Product, Category } from '@/types';
+import { Separator } from '@/components/ui/separator';
 
 interface ProductFormProps {
   product: Product | null;
@@ -120,7 +121,9 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
         </p>
       </div>
       
-      <div className="space-y-2">
+      <Separator className="my-4" />
+      
+      <div className="space-y-4">
         <h3 className="text-sm font-medium">Product Status</h3>
         <div className="flex items-center space-x-2">
           <Switch 
@@ -132,39 +135,54 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
         </div>
       </div>
       
-      <div className="space-y-2">
+      <Separator className="my-4" />
+      
+      <div className="space-y-4">
         <h3 className="text-sm font-medium">Collections</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
+        <p className="text-xs text-gray-500 mb-2">
+          Select which collections this product should appear in
+        </p>
+        
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <Label htmlFor="isFeatured" className="font-medium">Featured Product</Label>
+              <p className="text-xs text-gray-500">Show on homepage featured products section</p>
+            </div>
             <Switch 
               id="isFeatured" 
               checked={isFeatured}
               onCheckedChange={setIsFeatured}
             />
-            <Label htmlFor="isFeatured">Featured Product</Label>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between">
+            <div>
+              <Label htmlFor="isBestSeller" className="font-medium">Best Seller</Label>
+              <p className="text-xs text-gray-500">Mark as a best selling product</p>
+            </div>
             <Switch 
               id="isBestSeller" 
               checked={isBestSeller}
               onCheckedChange={setIsBestSeller}
             />
-            <Label htmlFor="isBestSeller">Best Seller</Label>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between">
+            <div>
+              <Label htmlFor="isNewArrival" className="font-medium">New Arrival</Label>
+              <p className="text-xs text-gray-500">Mark as a newly arrived product</p>
+            </div>
             <Switch 
               id="isNewArrival" 
               checked={isNewArrival}
               onCheckedChange={setIsNewArrival}
             />
-            <Label htmlFor="isNewArrival">New Arrival</Label>
           </div>
         </div>
       </div>
       
-      <DialogFooter>
+      <DialogFooter className="mt-6">
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Saving...' : (product ? 'Update Product' : 'Create Product')}
         </Button>
