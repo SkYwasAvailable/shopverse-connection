@@ -15,6 +15,9 @@ import Featured from "@/pages/Featured";
 import NewArrivals from "@/pages/NewArrivals";
 import Search from "@/pages/Search";
 import Cart from "@/pages/Cart";
+import Checkout from "@/pages/Checkout";
+import Payment from "@/pages/Payment";
+import OrderConfirmation from "@/pages/OrderConfirmation";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
@@ -40,6 +43,9 @@ function App() {
                 <Route path="/new-arrivals" element={<NewArrivals />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/payment/:orderId" element={<Payment />} />
+                <Route path="/confirmation/:orderId" element={<OrderConfirmation />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/admin" element={<Admin />} />

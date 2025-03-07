@@ -54,6 +54,9 @@ export interface Order {
   status: 'pending' | 'processing' | 'shipped' | 'delivered';
   createdAt: string;
   shippingAddress: Address;
+  shipping_method_id?: string;
+  payment_intent_id?: string;
+  payment_method?: string;
 }
 
 export interface Address {
@@ -63,4 +66,12 @@ export interface Address {
   state: string;
   postalCode: string;
   country: string;
+}
+
+export interface ShippingMethod {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  estimated_days: string;
 }

@@ -82,7 +82,10 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          payment_intent_id: string | null
+          payment_method: string | null
           shipping_address: Json
+          shipping_method_id: string | null
           status: string
           total: number
           updated_at: string
@@ -91,7 +94,10 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          payment_intent_id?: string | null
+          payment_method?: string | null
           shipping_address: Json
+          shipping_method_id?: string | null
           status?: string
           total: number
           updated_at?: string
@@ -100,13 +106,24 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          payment_intent_id?: string | null
+          payment_method?: string | null
           shipping_address?: Json
+          shipping_method_id?: string | null
           status?: string
           total?: number
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_shipping_method_id_fkey"
+            columns: ["shipping_method_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_methods"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -182,6 +199,33 @@ export type Database = {
           id?: string
           is_admin?: boolean | null
           name?: string | null
+        }
+        Relationships: []
+      }
+      shipping_methods: {
+        Row: {
+          created_at: string
+          description: string | null
+          estimated_days: string | null
+          id: string
+          name: string
+          price: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          estimated_days?: string | null
+          id?: string
+          name: string
+          price: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          estimated_days?: string | null
+          id?: string
+          name?: string
+          price?: number
         }
         Relationships: []
       }

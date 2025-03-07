@@ -216,7 +216,7 @@ const ProductsManager = () => {
       />
 
       <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="max-w-[650px] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {selectedProduct ? 'Edit Product' : 'Add New Product'}
