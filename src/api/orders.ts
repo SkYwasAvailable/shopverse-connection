@@ -18,7 +18,7 @@ export const getShippingMethods = async (): Promise<ShippingMethod[]> => {
 };
 
 // Create a new order
-export const createOrder = async (orderData: {
+export const createOrder = async (orderDetails: {
   items: CartItem[];
   total: number;
   shippingAddress: Address;
@@ -34,14 +34,14 @@ export const createOrder = async (orderData: {
   const userId = sessionData.session.user.id;
   
   // Create the order record first
-  const { data: orderData, error: orderError } = await supabase
+  const { data, error: orderError } = await supabase
     .from('orders')
     .insert({
       user_id: userId,
-      total: orderData.total,
-      shipping_address: orderData.shippingAddress,
-      shipping_method_id: orderData.shipping_method_id,
-      payment_method: orderData.payment_method,
+      total: orderDetails.total,
+      shipping_address: orderDetails.shippingAddress,
+      shipping_method_id: orderDetails.shipping_method_id,
+      payment_method: orderDetails.payment_method,
       status: 'pending'
     })
     .select()
@@ -53,8 +53,8 @@ export const createOrder = async (orderData: {
   }
   
   // Insert order items
-  const orderItems = orderData.items.map(item => ({
-    order_id: orderData.id,
+  const orderItems = orderDetails.items.map(item => ({
+    order_id: data.id,
     product_id: item.id,
     quantity: item.quantity,
     price: item.price
@@ -67,15 +67,20 @@ export const createOrder = async (orderData: {
   if (itemsError) {
     console.error('Error creating order items:', itemsError);
     // Attempt to delete the order since items failed
-    await supabase.from('orders').delete().eq('id', orderData.id);
+    await supabase.from('orders').delete().eq('id', data.id);
     throw new Error(itemsError.message);
   }
   
   return {
-    ...orderData,
-    items: orderData.items,
-    createdAt: orderData.created_at,
-    shippingAddress: orderData.shipping_address
+    id: data.id,
+    user_id: data.user_id,
+    items: orderDetails.items,
+    total: data.total,
+    status: data.status,
+    createdAt: data.created_at,
+    shippingAddress: data.shipping_address,
+    shipping_method_id: data.shipping_method_id,
+    payment_method: data.payment_method
   };
 };
 
