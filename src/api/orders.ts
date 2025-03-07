@@ -52,23 +52,36 @@ export const createOrder = async (orderDetails: {
     throw new Error(orderError.message);
   }
   
-  // Insert order items
-  const orderItems = orderDetails.items.map(item => ({
-    order_id: data.id,
-    product_id: item.id,
-    quantity: item.quantity,
-    price: item.price
-  }));
-  
-  const { error: itemsError } = await supabase
-    .from('order_items')
-    .insert(orderItems);
+  try {
+    // Insert order items
+    // For demo products with format "product-X", we'll use a placeholder UUID
+    // that would typically come from your products table
+    const orderItems = orderDetails.items.map(item => {
+      // Check if the item.id is in the format "product-X" and replace with a valid UUID
+      const productId = item.id.startsWith('product-') 
+        ? '00000000-0000-0000-0000-000000000000' // Placeholder UUID for demo products
+        : item.id;
+        
+      return {
+        order_id: data.id,
+        product_id: productId,
+        quantity: item.quantity,
+        price: item.price
+      };
+    });
     
-  if (itemsError) {
-    console.error('Error creating order items:', itemsError);
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .insert(orderItems);
+      
+    if (itemsError) {
+      throw new Error(itemsError.message);
+    }
+  } catch (error: any) {
+    console.error('Error creating order items:', error);
     // Attempt to delete the order since items failed
     await supabase.from('orders').delete().eq('id', data.id);
-    throw new Error(itemsError.message);
+    throw new Error(error.message);
   }
   
   return {
