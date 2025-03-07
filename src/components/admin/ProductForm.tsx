@@ -23,7 +23,9 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
   const [images, setImages] = useState(product?.images?.join('\n') || '');
   const [categoryId, setCategoryId] = useState(product?.category_id || '');
   const [inStock, setInStock] = useState(product?.inStock ?? true);
-  const [featured, setFeatured] = useState(product?.featured ?? false);
+  const [isFeatured, setIsFeatured] = useState(product?.isFeatured ?? false);
+  const [isBestSeller, setIsBestSeller] = useState(product?.isBestSeller ?? false);
+  const [isNewArrival, setIsNewArrival] = useState(product?.isNewArrival ?? false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,9 +40,11 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
       description,
       price: parseFloat(price),
       images: images.split('\n').filter(url => url.trim() !== ''),
-      category_id: categoryId || undefined,
+      category_id: categoryId || 'none',
       inStock,
-      featured,
+      isFeatured,
+      isBestSeller,
+      isNewArrival
     };
     
     onSubmit(productData);
@@ -90,7 +94,6 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
-              {/* Fix: Changed from empty string to "none" to avoid error */}
               <SelectItem value="none">None</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id}>
@@ -117,7 +120,8 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
         </p>
       </div>
       
-      <div className="flex flex-col gap-4 sm:flex-row sm:gap-8">
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium">Product Status</h3>
         <div className="flex items-center space-x-2">
           <Switch 
             id="inStock" 
@@ -126,14 +130,37 @@ const ProductForm = ({ product, categories, onSubmit, isSubmitting }: ProductFor
           />
           <Label htmlFor="inStock">In Stock</Label>
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <Switch 
-            id="featured" 
-            checked={featured}
-            onCheckedChange={setFeatured}
-          />
-          <Label htmlFor="featured">Featured Product</Label>
+      </div>
+      
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium">Collections</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-center space-x-2">
+            <Switch 
+              id="isFeatured" 
+              checked={isFeatured}
+              onCheckedChange={setIsFeatured}
+            />
+            <Label htmlFor="isFeatured">Featured Product</Label>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Switch 
+              id="isBestSeller" 
+              checked={isBestSeller}
+              onCheckedChange={setIsBestSeller}
+            />
+            <Label htmlFor="isBestSeller">Best Seller</Label>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Switch 
+              id="isNewArrival" 
+              checked={isNewArrival}
+              onCheckedChange={setIsNewArrival}
+            />
+            <Label htmlFor="isNewArrival">New Arrival</Label>
+          </div>
         </div>
       </div>
       

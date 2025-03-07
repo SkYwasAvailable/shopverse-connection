@@ -5,22 +5,37 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/products/ProductCard';
-import { getAllProducts } from '@/api/products';
-import { Product } from '@/types';
+import { getFeaturedProducts, getNewArrivals, getBestSellers } from '@/api/products';
 
 const NewArrivalsFeatured = () => {
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ['products'],
-    queryFn: getAllProducts,
+  // Get featured products
+  const { 
+    data: featuredProducts = [], 
+    isLoading: isFeaturedLoading 
+  } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: getFeaturedProducts,
   });
   
-  const featuredProducts = products.filter((product: Product) => product.featured).slice(0, 4);
+  // Get best sellers
+  const {
+    data: bestSellers = [],
+    isLoading: isBestSellersLoading
+  } = useQuery({
+    queryKey: ['products', 'bestSellers'],
+    queryFn: getBestSellers,
+  });
   
-  const newArrivals = [...products]
-    .sort((a: Product, b: Product) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    })
-    .slice(0, 4);
+  // Get new arrivals
+  const {
+    data: newArrivals = [],
+    isLoading: isNewArrivalsLoading
+  } = useQuery({
+    queryKey: ['products', 'newArrivals'],
+    queryFn: getNewArrivals,
+  });
+  
+  const isLoading = isFeaturedLoading || isBestSellersLoading || isNewArrivalsLoading;
   
   if (isLoading) {
     return (
@@ -35,6 +50,36 @@ const NewArrivalsFeatured = () => {
   return (
     <section className="py-24 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
+        {/* Best Sellers */}
+        <div className="mb-24">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+            <div>
+              <span className="inline-block px-3 py-1 rounded-full bg-white text-gray-800 text-xs font-semibold mb-2">
+                Customer Favorites
+              </span>
+              <h2 className="text-2xl font-bold">Best Sellers</h2>
+              <p className="mt-2 text-gray-600 max-w-xl">
+                Our most popular products based on sales. Updated daily.
+              </p>
+            </div>
+            <Button variant="outline" asChild className="mt-4 md:mt-0">
+              <Link to="/products">
+                View All <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {bestSellers.length > 0 ? (
+              bestSellers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            ) : (
+              <p className="col-span-full text-center text-gray-500 py-12">No best sellers available yet.</p>
+            )}
+          </div>
+        </div>
+        
         {/* Featured Products */}
         <div className="mb-24">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
@@ -60,7 +105,7 @@ const NewArrivalsFeatured = () => {
                 <ProductCard key={product.id} product={product} />
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500 py-12">No featured products available.</p>
+              <p className="col-span-full text-center text-gray-500 py-12">No featured products available yet.</p>
             )}
           </div>
         </div>
@@ -90,7 +135,7 @@ const NewArrivalsFeatured = () => {
                 <ProductCard key={product.id} product={product} />
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500 py-12">No new arrivals available.</p>
+              <p className="col-span-full text-center text-gray-500 py-12">No new arrivals available yet.</p>
             )}
           </div>
         </div>

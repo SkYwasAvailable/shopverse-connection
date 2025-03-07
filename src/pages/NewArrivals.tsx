@@ -5,21 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/products/ProductCard';
-import { getAllProducts } from '@/api/products';
-import { Product } from '@/types';
+import { getNewArrivals } from '@/api/products';
 
 const NewArrivals = () => {
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ['products'],
-    queryFn: getAllProducts,
+  const { data: newArrivals = [], isLoading, error } = useQuery({
+    queryKey: ['products', 'newArrivals'],
+    queryFn: getNewArrivals,
   });
-  
-  // Sort products by creation date and take the most recent ones
-  const newArrivals = [...products]
-    .sort((a: Product, b: Product) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    })
-    .slice(0, 8); // Show newest 8 products
   
   return (
     <>
@@ -37,6 +29,10 @@ const NewArrivals = () => {
             {isLoading ? (
               <div className="flex justify-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-red-500">Error loading products. Please try again later.</p>
               </div>
             ) : newArrivals.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

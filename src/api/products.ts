@@ -16,7 +16,10 @@ export const getAllProducts = async (): Promise<Product[]> => {
   return data.map(product => ({
     ...product,
     category: product.categories,
-    inStock: product.in_stock
+    inStock: product.in_stock,
+    isFeatured: product.featured,
+    isBestSeller: product.is_best_seller,
+    isNewArrival: product.is_new_arrival
   }));
 };
 
@@ -36,7 +39,56 @@ export const getFeaturedProducts = async (): Promise<Product[]> => {
   return data.map(product => ({
     ...product,
     category: product.categories,
-    inStock: product.in_stock
+    inStock: product.in_stock,
+    isFeatured: product.featured,
+    isBestSeller: product.is_best_seller,
+    isNewArrival: product.is_new_arrival
+  }));
+};
+
+export const getNewArrivals = async (): Promise<Product[]> => {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, categories:category_id(id, name)')
+    .eq('is_new_arrival', true)
+    .order('created_at', { ascending: false })
+    .limit(4);
+    
+  if (error) {
+    console.error('Error fetching new arrivals:', error);
+    throw error;
+  }
+  
+  return data.map(product => ({
+    ...product,
+    category: product.categories,
+    inStock: product.in_stock,
+    isFeatured: product.featured,
+    isBestSeller: product.is_best_seller,
+    isNewArrival: product.is_new_arrival
+  }));
+};
+
+export const getBestSellers = async (): Promise<Product[]> => {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, categories:category_id(id, name)')
+    .eq('is_best_seller', true)
+    .order('created_at', { ascending: false })
+    .limit(4);
+    
+  if (error) {
+    console.error('Error fetching best sellers:', error);
+    throw error;
+  }
+  
+  return data.map(product => ({
+    ...product,
+    category: product.categories,
+    inStock: product.in_stock,
+    isFeatured: product.featured,
+    isBestSeller: product.is_best_seller,
+    isNewArrival: product.is_new_arrival
   }));
 };
 
@@ -55,7 +107,10 @@ export const getProductById = async (id: string): Promise<Product> => {
   return {
     ...data,
     category: data.categories,
-    inStock: data.in_stock
+    inStock: data.in_stock,
+    isFeatured: data.featured,
+    isBestSeller: data.is_best_seller,
+    isNewArrival: data.is_new_arrival
   };
 };
 
@@ -74,7 +129,10 @@ export const getProductsByCategory = async (categoryId: string): Promise<Product
   return data.map(product => ({
     ...product,
     category: product.categories,
-    inStock: product.in_stock
+    inStock: product.in_stock,
+    isFeatured: product.featured,
+    isBestSeller: product.is_best_seller,
+    isNewArrival: product.is_new_arrival
   }));
 };
 
@@ -86,8 +144,10 @@ export const createProduct = async (product: Omit<Product, 'id'>): Promise<Produ
       description: product.description,
       price: product.price,
       images: product.images,
-      category_id: product.category_id,
-      featured: product.featured || false,
+      category_id: product.category_id === 'none' ? null : product.category_id,
+      featured: product.isFeatured || false,
+      is_best_seller: product.isBestSeller || false,
+      is_new_arrival: product.isNewArrival || false,
       in_stock: product.inStock
     }])
     .select()
@@ -100,22 +160,45 @@ export const createProduct = async (product: Omit<Product, 'id'>): Promise<Produ
   
   return {
     ...data,
-    inStock: data.in_stock
+    inStock: data.in_stock,
+    isFeatured: data.featured,
+    isBestSeller: data.is_best_seller,
+    isNewArrival: data.is_new_arrival
   };
 };
 
 export const updateProduct = async (id: string, product: Partial<Product>): Promise<Product> => {
   const updates: any = { ...product };
   
-  // Convert inStock to in_stock for the database
+  // Convert fields for the database
   if (product.inStock !== undefined) {
     updates.in_stock = product.inStock;
     delete updates.inStock;
   }
   
+  if (product.isFeatured !== undefined) {
+    updates.featured = product.isFeatured;
+    delete updates.isFeatured;
+  }
+  
+  if (product.isBestSeller !== undefined) {
+    updates.is_best_seller = product.isBestSeller;
+    delete updates.isBestSeller;
+  }
+  
+  if (product.isNewArrival !== undefined) {
+    updates.is_new_arrival = product.isNewArrival;
+    delete updates.isNewArrival;
+  }
+  
   // Remove category as it's a join
   if (updates.category) {
     delete updates.category;
+  }
+  
+  // Handle none category
+  if (updates.category_id === 'none') {
+    updates.category_id = null;
   }
   
   const { data, error } = await supabase
@@ -132,7 +215,10 @@ export const updateProduct = async (id: string, product: Partial<Product>): Prom
   
   return {
     ...data,
-    inStock: data.in_stock
+    inStock: data.in_stock,
+    isFeatured: data.featured,
+    isBestSeller: data.is_best_seller,
+    isNewArrival: data.is_new_arrival
   };
 };
 

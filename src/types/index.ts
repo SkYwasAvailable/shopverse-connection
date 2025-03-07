@@ -8,6 +8,9 @@ export interface Product {
   category_id?: string;
   category?: Category;
   featured?: boolean;
+  isFeatured?: boolean;
+  isBestSeller?: boolean;
+  isNewArrival?: boolean;
   inStock: boolean;
   quantity?: number;
   created_at?: string;

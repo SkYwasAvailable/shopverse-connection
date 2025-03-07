@@ -5,16 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/products/ProductCard';
-import { getAllProducts } from '@/api/products';
-import { Product } from '@/types';
+import { getFeaturedProducts } from '@/api/products';
 
 const Featured = () => {
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ['products'],
-    queryFn: getAllProducts,
+  const { data: featuredProducts = [], isLoading, error } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: getFeaturedProducts,
   });
-  
-  const featuredProducts = products.filter((product: Product) => product.featured);
   
   return (
     <>
@@ -32,6 +29,10 @@ const Featured = () => {
             {isLoading ? (
               <div className="flex justify-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <p className="text-red-500">Error loading products. Please try again later.</p>
               </div>
             ) : featuredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
