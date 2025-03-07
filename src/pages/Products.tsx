@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { getAllProducts, categories } from '@/data/products';
-import { Product } from '@/types';
+import { getAllProducts } from '@/api/products';
+import { getAllCategories } from '@/api/categories';
+import { Product, Category } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -24,17 +27,42 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 const Products = () => {
-  const allProducts = getAllProducts();
-  const [products, setProducts] = useState<Product[]>(allProducts);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<string>('featured');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
   const [inStockOnly, setInStockOnly] = useState<boolean>(false);
   
-  // Filter and sort products when filter options change
+  // Fetch products from Supabase
+  const { 
+    data: allProducts = [], 
+    isLoading: isLoadingProducts,
+    error: productsError
+  } = useQuery({
+    queryKey: ['products'],
+    queryFn: getAllProducts,
+  });
+  
+  // Fetch categories from Supabase
+  const {
+    data: categories = [],
+    isLoading: isLoadingCategories,
+    error: categoriesError
+  } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getAllCategories,
+  });
+  
+  // Filtered and sorted products
+  const [products, setProducts] = useState<Product[]>([]);
+  
+  // Filter and sort products when filter options or data changes
   useEffect(() => {
+    if (!allProducts.length) return;
+    
     let filteredProducts = [...allProducts];
     
     // Filter by category
@@ -72,7 +100,7 @@ const Products = () => {
     }
     
     setProducts(filteredProducts);
-  }, [selectedCategory, sortOrder, priceRange, inStockOnly]);
+  }, [allProducts, selectedCategory, sortOrder, priceRange, inStockOnly]);
   
   // Reset filters function
   const resetFilters = () => {
@@ -81,6 +109,56 @@ const Products = () => {
     setPriceRange([0, 2000]);
     setInStockOnly(false);
   };
+  
+  // Loading state
+  if (isLoadingProducts || isLoadingCategories) {
+    return (
+      <>
+        <Helmet>
+          <title>All Products - TechStore</title>
+          <meta name="description" content="Browse our full collection of premium tech products." />
+        </Helmet>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="flex-grow pt-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+              </div>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </>
+    );
+  }
+  
+  // Error state
+  if (productsError || categoriesError) {
+    return (
+      <>
+        <Helmet>
+          <title>All Products - TechStore</title>
+          <meta name="description" content="Browse our full collection of premium tech products." />
+        </Helmet>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="flex-grow pt-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <Alert variant="destructive" className="mb-6">
+                <AlertCircle className="h-4 w-4 mr-2" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  {(productsError as Error)?.message || (categoriesError as Error)?.message || 'Failed to load products. Please try again later.'}
+                </AlertDescription>
+              </Alert>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </>
+    );
+  }
   
   return (
     <>
